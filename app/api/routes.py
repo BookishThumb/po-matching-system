@@ -31,17 +31,7 @@ class RejectRequest(BaseModel):
     actor: str = "reviewer"
 
 
-@router.post("/token")
-@limiter.limit("5/minute")
-def login_for_access_token(request: Request, form_data: OAuth2PasswordRequestForm = Depends()):
-    if form_data.username != settings.admin_username or form_data.password != settings.admin_password:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    access_token = create_access_token(data={"sub": form_data.username})
-    return {"access_token": access_token, "token_type": "bearer"}
+
 
 @router.post("/ingest")
 @limiter.limit("5/minute")

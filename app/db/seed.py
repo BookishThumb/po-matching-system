@@ -1,6 +1,8 @@
 import argparse
 from app.db.database import engine, Base, SessionLocal
-from app.db.models import PurchaseOrder
+from app.db.models import PurchaseOrder, User
+from app.config import settings
+import bcrypt
 
 # Sample PO data exactly as requested for varied test cases
 SAMPLE_POS = [
@@ -135,6 +137,17 @@ def seed_db(reset=False):
     for po in pos:
         print(f"{po.po_number:<10} | {po.vendor_name:<30} | {po.total_amount:<10} | {po.currency}")
         
+    print("\n--- Seeding Users ---")
+    admin = db.query(User).filter_by(username=settings.admin_username).first()
+    if not admin:
+        hashed_pw = bcrypt.hashpw(settings.default_admin_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        new_admin = User(username=settings.admin_username, password_hash=hashed_pw, role="admin")
+        db.add(new_admin)
+        db.commit()
+        print(f"Default admin user '{settings.admin_username}' seeded successfully.")
+    else:
+        print(f"Admin user '{settings.admin_username}' already exists.")
+
     db.close()
     
 if __name__ == "__main__":

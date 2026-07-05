@@ -26,8 +26,8 @@ This system acts as a code-based equivalent to tools like n8n and Airtable, usin
    ```bash
    pip install -r requirements.txt
    ```
-4. Copy the `.env.example` to `.env` and fill in your actual `GROQ_API_KEY`.
-5. Seed the database with the sample POs:
+4. Copy the `.env.example` to `.env`. Fill in your actual `GROQ_API_KEY`. You can also change the `DEFAULT_ADMIN_PASSWORD` (default: `password`) and `JWT_SECRET_KEY` here.
+5. Seed the database with the sample POs and the default admin user:
    ```bash
    python -m app.db.seed
    ```
@@ -39,7 +39,25 @@ This system acts as a code-based equivalent to tools like n8n and Airtable, usin
    ```bash
    uvicorn app.main:app --reload
    ```
-8. Open your browser to `http://localhost:8000` to view the Procurement Review UI.
+8. Open your browser to `http://localhost:8000`. You will see the Landing Page. Click "Login to Dashboard" and use the credentials:
+   - **Username:** `admin`
+   - **Password:** `password` (or whatever you set in `.env`)
+
+## Security Considerations
+
+To ensure the system is secure and resilient, the following security layers have been implemented:
+
+- **JWT-Based Authentication:** All API data endpoints (including invoice retrieval, extraction triggers, and audit logs) are protected via a `get_current_user` dependency that validates JSON Web Tokens (JWT). Unauthenticated requests immediately return a `401 Unauthorized`.
+- **Password Hashing:** Passwords are never stored in plaintext. They are hashed using `bcrypt` and verified securely against the SQLite database.
+- **Environment Variables:** Default admin credentials are sourced securely from the `.env` file (`DEFAULT_ADMIN_PASSWORD`) rather than being hardcoded in the application source code.
+- **Rate Limiting:** To prevent brute-force attacks on the login endpoint and abuse of the `/ingest` LLM endpoint, `slowapi` enforces an in-memory rate limit (5 requests per 5 minutes per IP for login).
+- **Session Storage:** The frontend uses `sessionStorage` instead of `localStorage` to store the JWT token, ensuring it is cleared automatically when the browser tab closes.
+- **Generic Error Messages:** The `/auth/login` endpoint purposefully returns a generic "Invalid credentials" error to prevent user enumeration attacks.
+- **Production Enhancements (Future):** For a true production deployment, further enhancements would include:
+  - Storing tokens in `httpOnly` cookies to mitigate XSS attacks.
+  - Enforcing strict HTTPS transport.
+  - Adding a reverse proxy (e.g. Nginx) with strict CORS domain restrictions.
+  - Refresh token rotation and robust Role-Based Access Control (RBAC).
 
 ## Required Environment Variables
 

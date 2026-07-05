@@ -1,84 +1,211 @@
 const { useState, useEffect, useMemo } = React;
 const { motion, AnimatePresence } = window.Motion;
 const { PieChart, Pie, Cell, RadialBarChart, RadialBar, ResponsiveContainer, Tooltip: RechartsTooltip } = window.Recharts;
+const { Shield, Zap, FileSearch, CheckCircle, BarChart3, Lock, Eye, CheckCircle2, FileText, Database, Code, Users } = window.lucide;
 
 // API Base URL
 const API_BASE = '/api';
 
 const apiFetch = async (url, options = {}) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
   const headers = { ...options.headers };
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
   const response = await fetch(url, { ...options, headers });
   if (response.status === 401) {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     window.location.reload();
   }
   return response;
 };
 
-
-
 // --- Auth Components ---
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, onBack }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!username || !password) return;
+    setLoading(true);
+    setError('');
     const formData = new URLSearchParams();
     formData.append('username', username);
     formData.append('password', password);
 
     try {
-      const res = await fetch(`${API_BASE}/token`, {
+      const res = await fetch(`/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: formData
       });
       if (res.ok) {
         const data = await res.json();
-        localStorage.setItem('token', data.access_token);
+        sessionStorage.setItem('token', data.access_token);
         onLogin(data.access_token);
       } else {
         setError('Invalid credentials');
       }
     } catch (err) {
       setError('Connection error');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center" style={{ height: '100vh', width: '100vw', backgroundColor: 'var(--bg-base)' }}>
-      <div className="card" style={{ width: '400px', padding: '2rem' }}>
-        <h2 className="text-center mb-6 text-ai">PO Guardian Login</h2>
+    <div className="flex items-center justify-center" style={{ minHeight: '100vh', width: '100vw', backgroundColor: 'var(--bg-base)' }}>
+      <button className="btn btn-outline" style={{ position: 'absolute', top: '2rem', left: '2rem' }} onClick={onBack}>
+        &larr; Back to Home
+      </button>
+      
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95, y: 20 }} 
+        animate={{ opacity: 1, scale: 1, y: 0 }} 
+        transition={{ duration: 0.4 }}
+        className="card" style={{ width: '400px', padding: '2.5rem', boxShadow: '0 0 40px rgba(0, 229, 255, 0.1)' }}
+      >
+        <div className="flex justify-center mb-4">
+          <div style={{ width: '48px', height: '48px', backgroundColor: 'rgba(0, 229, 255, 0.1)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--color-ai)' }}>
+             <i data-lucide="lock" style={{ color: 'var(--color-ai)' }}></i>
+          </div>
+        </div>
+        <h2 className="text-center mb-6 text-ai">Welcome Back</h2>
+        
+        {error && (
+          <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '0.75rem', borderRadius: '8px', color: 'var(--status-rejected)', marginBottom: '1.5rem', textAlign: 'center', fontSize: '0.875rem' }}>
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="flex-col gap-4">
-          <input 
-            type="text" 
-            placeholder="Username" 
-            value={username} 
-            onChange={e => setUsername(e.target.value)} 
-            required 
-            style={{ padding: '0.75rem', borderRadius: '4px', border: '1px solid var(--border)', backgroundColor: 'var(--bg-surface-highlight)', color: '#fff' }}
-          />
-          <input 
-            type="password" 
-            placeholder="Password" 
-            value={password} 
-            onChange={e => setPassword(e.target.value)} 
-            required 
-            style={{ padding: '0.75rem', borderRadius: '4px', border: '1px solid var(--border)', backgroundColor: 'var(--bg-surface-highlight)', color: '#fff' }}
-          />
-          {error && <div style={{ color: 'var(--status-rejected)' }}>{error}</div>}
-          <button type="submit" className="btn btn-primary" style={{ padding: '0.75rem' }}>Login</button>
+          <div className="flex-col gap-1">
+            <label style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Username</label>
+            <input 
+              type="text" 
+              placeholder="Enter your username" 
+              value={username} 
+              onChange={e => setUsername(e.target.value)} 
+              required 
+              style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', backgroundColor: 'var(--bg-surface-highlight)', color: '#fff', outline: 'none', transition: 'border-color 0.2s' }}
+              onFocus={(e) => e.target.style.borderColor = 'var(--color-ai)'}
+              onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
+            />
+          </div>
+          <div className="flex-col gap-1 mb-2">
+            <label style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Password</label>
+            <input 
+              type="password" 
+              placeholder="Enter your password" 
+              value={password} 
+              onChange={e => setPassword(e.target.value)} 
+              required 
+              style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border)', backgroundColor: 'var(--bg-surface-highlight)', color: '#fff', outline: 'none', transition: 'border-color 0.2s' }}
+              onFocus={(e) => e.target.style.borderColor = 'var(--color-ai)'}
+              onBlur={(e) => e.target.style.borderColor = 'var(--border)'}
+            />
+          </div>
+          
+          <motion.button 
+            whileHover={!loading ? { y: -1, filter: 'brightness(1.1)' } : {}}
+            whileTap={!loading ? { scale: 0.98 } : {}}
+            type="submit" 
+            className="btn" 
+            style={{ padding: '0.875rem', backgroundColor: 'var(--color-ai)', color: '#000', fontWeight: 'bold', display: 'flex', justifyContent: 'center', borderRadius: '8px', opacity: loading ? 0.7 : 1 }}
+            disabled={loading}
+          >
+            {loading ? "Authenticating..." : "Sign In"}
+          </motion.button>
         </form>
-      </div>
+
+        <div className="text-center mt-6 text-xs text-muted" style={{ padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '8px' }}>
+          <strong>Demo credentials:</strong><br/>
+          Username: <code>admin</code> | Password: <code>password</code>
+        </div>
+      </motion.div>
     </div>
   );
 };
+
+// --- Landing Page ---
+const LandingPage = ({ onNavigate }) => {
+  useEffect(() => {
+    window.lucide.createIcons();
+  }, []);
+
+  return (
+    <div style={{ minHeight: '100vh', width: '100vw', backgroundColor: 'var(--bg-base)', overflowX: 'hidden' }}>
+      {/* Navbar */}
+      <nav className="flex justify-between items-center px-8 py-4 border-b border-[var(--border)] bg-[var(--bg-surface)]">
+        <div className="flex items-center gap-3">
+           <div style={{ width: '28px', height: '28px', backgroundColor: 'var(--color-ai)', borderRadius: '6px' }}></div>
+           <h1 className="text-xl font-bold m-0" style={{ margin: 0 }}>PO Guardian</h1>
+        </div>
+        <div>
+          <button className="btn btn-primary" onClick={() => onNavigate('login')}>Login to Dashboard</button>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="flex-col items-center justify-center text-center py-24 px-4 relative" style={{ overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(0,229,255,0.1) 0%, transparent 70%)', top: '-100px', left: '50%', transform: 'translateX(-50%)', zIndex: 0 }}></div>
+        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-5xl font-bold mb-6" style={{ zIndex: 1, maxWidth: '800px' }}>
+          AI-Powered <span className="text-ai">Invoice Validation</span> & PO Matching
+        </motion.h1>
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-xl text-secondary mb-10 max-w-2xl" style={{ zIndex: 1, maxWidth: '700px' }}>
+          Automate your Accounts Payable. Extract data with Llama 3.3, match against Purchase Orders, and flag discrepancies instantly.
+        </motion.p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} style={{ zIndex: 1 }}>
+          <button className="btn btn-primary" style={{ padding: '1rem 2rem', fontSize: '1.1rem' }} onClick={() => onNavigate('login')}>
+            Enter Dashboard &rarr;
+          </button>
+        </motion.div>
+      </section>
+
+      {/* Features Grid */}
+      <section className="py-16 px-8 max-w-6xl mx-auto">
+        <h2 className="text-center text-3xl mb-12">Key Features</h2>
+        <div className="grid grid-cols-3 gap-8">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="card" style={{ backgroundColor: 'var(--bg-surface)' }}>
+            <i data-lucide="zap" style={{ color: 'var(--color-ai)', width: '32px', height: '32px', marginBottom: '1rem' }}></i>
+            <h3 className="text-lg mb-2">AI-Powered Extraction</h3>
+            <p className="text-secondary text-sm">LLM reads unstructured invoice PDFs and extracts structured line items, totals, and taxes accurately.</p>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="card" style={{ backgroundColor: 'var(--bg-surface)' }}>
+            <i data-lucide="file-search" style={{ color: '#10b981', width: '32px', height: '32px', marginBottom: '1rem' }}></i>
+            <h3 className="text-lg mb-2">Automated PO Matching</h3>
+            <p className="text-secondary text-sm">Field-by-field comparison against approved Purchase Orders with configurable tolerances.</p>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="card" style={{ backgroundColor: 'var(--bg-surface)' }}>
+            <i data-lucide="shield" style={{ color: '#f59e0b', width: '32px', height: '32px', marginBottom: '1rem' }}></i>
+            <h3 className="text-lg mb-2">Discrepancy Detection</h3>
+            <p className="text-secondary text-sm">Instantly flags vendor mismatches, quantity/price errors, duplicates, and missing references.</p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Tech Stack Strip */}
+      <section className="py-8 border-t border-b border-[var(--border)] bg-[rgba(0,0,0,0.2)] mt-16">
+        <div className="flex justify-center items-center gap-12 text-muted">
+           <span className="flex items-center gap-2"><i data-lucide="code"></i> Python</span>
+           <span className="flex items-center gap-2"><i data-lucide="zap"></i> FastAPI</span>
+           <span className="flex items-center gap-2"><i data-lucide="cpu"></i> Groq (Llama 3.3)</span>
+           <span className="flex items-center gap-2"><i data-lucide="database"></i> SQLite</span>
+           <span className="flex items-center gap-2"><i data-lucide="layout"></i> React</span>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-8 text-center text-secondary text-sm">
+        <p>Built for AnthraSync AI Engineer Assignment — Round 3</p>
+      </footer>
+    </div>
+  );
+};
+
 
 // --- Utility Components ---
 const StatusBadge = ({ status }) => {
@@ -135,14 +262,12 @@ const PipelineDashboard = ({ onNavigate }) => {
 
   const runDemo = async () => {
     setIsDemoRunning(true);
-    // Animate pipeline
     for (let i = 1; i <= 8; i++) {
       setActiveNode(i);
-      await new Promise(r => setTimeout(r, 600)); // 600ms per node
+      await new Promise(r => setTimeout(r, 600)); 
     }
     setActiveNode(null);
 
-    // Call API (happens in background mostly)
     try {
       await apiFetch(`${API_BASE}/ingest`, { method: 'POST' });
     } catch (e) {
@@ -167,11 +292,9 @@ const PipelineDashboard = ({ onNavigate }) => {
         </button>
       </div>
 
-      {/* Pipeline Visualization */}
       <div className="card" style={{ padding: '3rem 2rem', position: 'relative', overflow: 'hidden' }}>
         <h3 className="text-secondary text-sm uppercase mb-6" style={{ position: 'absolute', top: '1rem' }}>AI Processing Flow</h3>
         <div className="flex justify-between items-center" style={{ position: 'relative' }}>
-          {/* Connecting Line */}
           <div style={{ position: 'absolute', top: '50%', left: '5%', right: '5%', height: '4px', backgroundColor: 'var(--border)', zIndex: 0, transform: 'translateY(-50%)', borderRadius: '2px' }}></div>
           
           {nodes.map(node => (
@@ -192,7 +315,6 @@ const PipelineDashboard = ({ onNavigate }) => {
             </div>
           ))}
 
-          {/* Moving dot */}
           {activeNode && (
             <motion.div
               initial={false}
@@ -399,10 +521,7 @@ const InvoiceDetail = ({ id, onNavigate }) => {
       </div>
 
       <div className="grid grid-cols-3 gap-6">
-        {/* Left Column */}
         <div className="col-span-2 flex-col gap-6">
-          
-          {/* AI Extracted Data Panel */}
           <div className="card" style={{ borderLeft: '4px solid var(--color-ai)', background: 'linear-gradient(90deg, rgba(0, 229, 255, 0.05) 0%, transparent 100%)' }}>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-ai flex items-center gap-2"><span className="badge badge-ai">AI</span> Extracted Data</h3>
@@ -428,7 +547,6 @@ const InvoiceDetail = ({ id, onNavigate }) => {
             </div>
           </div>
 
-          {/* Warnings Panel */}
           {invoice.extraction_warnings && invoice.extraction_warnings.length > 0 && (
             <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} className="card" style={{ border: '1px solid rgba(245, 158, 11, 0.5)', backgroundColor: 'rgba(245, 158, 11, 0.05)' }}>
               <h3 className="text-review mb-2" style={{ color: '#f59e0b' }}>⚠️ Extraction Warnings</h3>
@@ -438,7 +556,6 @@ const InvoiceDetail = ({ id, onNavigate }) => {
             </motion.div>
           )}
 
-          {/* Comparison Table */}
           <div className="card">
             <h3 className="mb-4">Invoice vs. PO Comparison</h3>
             <div className="table-wrapper">
@@ -480,7 +597,6 @@ const InvoiceDetail = ({ id, onNavigate }) => {
             </div>
           </div>
 
-          {/* Discrepancies */}
           <div className="card">
             <h3 className="mb-4">Identified Discrepancies</h3>
             <div className="flex-col gap-4">
@@ -502,13 +618,9 @@ const InvoiceDetail = ({ id, onNavigate }) => {
               )}
             </div>
           </div>
-
         </div>
 
-        {/* Right Column */}
         <div className="flex-col gap-6">
-          
-          {/* Verdict */}
           <div className="card text-center" style={{ boxShadow: `0 0 20px ${invoice.validation_status === 'Ready for Payment' ? 'rgba(16, 185, 129, 0.2)' : invoice.validation_status === 'Rejected' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(245, 158, 11, 0.2)'}` }}>
             <h3 className="text-secondary text-sm uppercase mb-2">Final Verdict</h3>
             <div className="mb-4"><StatusBadge status={invoice.validation_status} /></div>
@@ -520,7 +632,6 @@ const InvoiceDetail = ({ id, onNavigate }) => {
             </p>
           </div>
 
-          {/* Review Panel */}
           {invoice.validation_status === 'Ready for Payment' ? (
             <div className="card">
               <h3 className="text-secondary text-sm uppercase mb-4">Payment Actions</h3>
@@ -543,7 +654,6 @@ const InvoiceDetail = ({ id, onNavigate }) => {
             </div>
           ) : null}
 
-          {/* Audit Trail */}
           <div className="card">
             <h3 className="text-secondary text-sm uppercase mb-4">Audit Trail</h3>
             <div className="flex-col gap-4">
@@ -565,7 +675,6 @@ const InvoiceDetail = ({ id, onNavigate }) => {
               ))}
             </div>
           </div>
-
         </div>
       </div>
     </motion.div>
@@ -611,18 +720,49 @@ const MonitoringPage = () => {
 // --- App Layout ---
 
 const App = () => {
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const [view, setView] = useState({ name: 'dashboard', param: null });
+  const [token, setToken] = useState(sessionStorage.getItem('token'));
+  const [view, setView] = useState({ name: 'landing', param: null });
+  const [isVerifying, setIsVerifying] = useState(!!token);
+
+  useEffect(() => {
+    if (token) {
+      // Verify token on load
+      fetch(`/auth/me`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).then(res => {
+        if (!res.ok) {
+          sessionStorage.removeItem('token');
+          setToken(null);
+          setView({ name: 'landing', param: null });
+        } else {
+          // Valid token, if on landing page, redirect to dashboard
+          if (view.name === 'landing' || view.name === 'login') {
+            setView({ name: 'dashboard', param: null });
+          }
+        }
+        setIsVerifying(false);
+      }).catch(() => {
+        setIsVerifying(false);
+      });
+    } else {
+      setIsVerifying(false);
+    }
+  }, [token]);
+
+  if (isVerifying) return <div className="flex items-center justify-center" style={{ height: '100vh', color: 'var(--text-secondary)' }}>Loading...</div>;
 
   if (!token) {
-    return <Login onLogin={setToken} />;
+    if (view.name === 'login') {
+      return <Login onLogin={setToken} onBack={() => setView({ name: 'landing', param: null })} />;
+    }
+    return <LandingPage onNavigate={(name) => setView({ name, param: null })} />;
   }
 
   const logout = () => {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     setToken(null);
+    setView({ name: 'landing', param: null });
   };
-
 
   const navigate = (name, param = null) => {
     setView({ name, param });

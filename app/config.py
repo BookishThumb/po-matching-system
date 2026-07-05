@@ -23,7 +23,7 @@ class Settings(BaseSettings):
 
     # Security Configuration
     admin_username: str = "admin"
-    admin_password: str = "password" # in a real app, this would be a hash or in a DB
+    default_admin_password: str = "password" # Used to seed the initial user in the DB
     jwt_secret_key: str = "super_secret_key_please_change"
     jwt_algorithm: str = "HS256"
 

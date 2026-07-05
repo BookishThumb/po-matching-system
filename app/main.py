@@ -9,6 +9,8 @@ from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from app.api.security import limiter
 
+from app.api.auth_routes import router as auth_router
+
 logger = setup_logger(__name__)
 
 app = FastAPI(
@@ -16,6 +18,9 @@ app = FastAPI(
     description="API for validating invoices against purchase orders."
 )
 
+# Note: In a real production deployment, CORS should be tightened further
+# to only allow specific domains (e.g. your production frontend URL), rather 
+# than relying on local dev addresses.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:8000", "http://127.0.0.1:8000"],
@@ -27,6 +32,7 @@ app.add_middleware(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
+app.include_router(auth_router)
 app.include_router(api_router, prefix="/api")
 
 @app.get("/health")

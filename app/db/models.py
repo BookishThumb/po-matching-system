@@ -67,3 +67,15 @@ class AuditLog(Base):
 
     def __repr__(self):
         return f"<AuditLog(invoice_id={self.invoice_id}, action={self.action}, timestamp={self.timestamp})>"
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String, unique=True, index=True, nullable=False)
+    password_hash = Column(String, nullable=False)
+    role = Column(String, default="reviewer")
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    def __repr__(self):
+        return f"<User(username={self.username}, role={self.role})>"
