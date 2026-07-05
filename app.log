@@ -990,3 +990,65 @@
 {"timestamp": "2026-07-05 11:54:52,701", "level": "INFO", "module": "groq_client", "message": "Calling Groq API (attempt 1/3)", "model": "llama-3.3-70b-versatile", "prompt_length": 2540}
 {"timestamp": "2026-07-05 11:54:53,243", "level": "INFO", "module": "groq_client", "message": "Groq API call succeeded", "duration_ms": 542, "response_length": 579}
 {"timestamp": "2026-07-05 11:54:53,243", "level": "INFO", "module": "extractor", "message": "AI extraction successful on first attempt"}
+{"timestamp": "2026-07-05 12:22:50,501", "level": "INFO", "module": "imap_fetcher", "message": "Connecting to IMAP server: imap.gmail.com:993"}
+{"timestamp": "2026-07-05 12:22:53,461", "level": "INFO", "module": "imap_fetcher", "message": "Limiting to the 1 most recent emails out of 572 unread."}
+{"timestamp": "2026-07-05 12:22:54,024", "level": "INFO", "module": "imap_fetcher", "message": "Processing email from no-reply@accounts.google.com - Subject: Security alert"}
+{"timestamp": "2026-07-05 12:22:54,024", "level": "INFO", "module": "imap_fetcher", "message": "No PDF found in email 787. Leaving as unread."}
+{"timestamp": "2026-07-05 12:22:54,514", "level": "INFO", "module": "inbox_watcher", "message": "Scanning for new emails..."}
+{"timestamp": "2026-07-05 12:22:54,519", "level": "INFO", "module": "inbox_watcher", "message": "Discovered new email payload: email_1", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_1\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:54,522", "level": "INFO", "module": "inbox_watcher", "message": "Discovered new email payload: email_2", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_2\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:54,524", "level": "INFO", "module": "inbox_watcher", "message": "Discovered new email payload: email_3", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_3\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:54,526", "level": "INFO", "module": "inbox_watcher", "message": "Discovered new email payload: email_4", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_4\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:54,529", "level": "INFO", "module": "inbox_watcher", "message": "Discovered new email payload: email_5", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_5\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:54,531", "level": "INFO", "module": "inbox_watcher", "message": "Discovered new email payload: email_6", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_6\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:54,532", "level": "INFO", "module": "inbox_watcher", "message": "Discovered new email payload: email_7", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_7\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:54,533", "level": "INFO", "module": "inbox_watcher", "message": "Found 7 new emails to process."}
+{"timestamp": "2026-07-05 12:22:54,533", "level": "INFO", "module": "pipeline", "message": "Starting pipeline for email", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_1\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:54,534", "level": "INFO", "module": "pdf_extractor", "message": "Starting PDF extraction for invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:54,546", "level": "INFO", "module": "pdf_extractor", "message": "Successfully extracted 259 characters from invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:54,547", "level": "INFO", "module": "extractor", "message": "Starting AI extraction of invoice data"}
+{"timestamp": "2026-07-05 12:22:54,596", "level": "INFO", "module": "groq_client", "message": "Calling Groq API (attempt 1/3)", "model": "llama-3.3-70b-versatile", "prompt_length": 2585}
+{"timestamp": "2026-07-05 12:22:55,563", "level": "INFO", "module": "groq_client", "message": "Groq API call succeeded", "duration_ms": 967, "response_length": 861}
+{"timestamp": "2026-07-05 12:22:55,564", "level": "INFO", "module": "extractor", "message": "AI extraction successful on first attempt"}
+{"timestamp": "2026-07-05 12:22:55,580", "level": "INFO", "module": "pipeline", "message": "Starting pipeline for email", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_2\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:55,580", "level": "INFO", "module": "pdf_extractor", "message": "Starting PDF extraction for invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:55,591", "level": "INFO", "module": "pdf_extractor", "message": "Successfully extracted 237 characters from invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:55,592", "level": "INFO", "module": "extractor", "message": "Starting AI extraction of invoice data"}
+{"timestamp": "2026-07-05 12:22:55,600", "level": "INFO", "module": "groq_client", "message": "Calling Groq API (attempt 1/3)", "model": "llama-3.3-70b-versatile", "prompt_length": 2563}
+{"timestamp": "2026-07-05 12:22:56,504", "level": "INFO", "module": "groq_client", "message": "Groq API call succeeded", "duration_ms": 905, "response_length": 699}
+{"timestamp": "2026-07-05 12:22:56,505", "level": "INFO", "module": "extractor", "message": "AI extraction successful on first attempt"}
+{"timestamp": "2026-07-05 12:22:56,526", "level": "INFO", "module": "pipeline", "message": "Starting pipeline for email", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_3\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:56,527", "level": "INFO", "module": "pdf_extractor", "message": "Starting PDF extraction for invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:56,549", "level": "INFO", "module": "pdf_extractor", "message": "Successfully extracted 292 characters from invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:56,549", "level": "INFO", "module": "extractor", "message": "Starting AI extraction of invoice data"}
+{"timestamp": "2026-07-05 12:22:56,558", "level": "INFO", "module": "groq_client", "message": "Calling Groq API (attempt 1/3)", "model": "llama-3.3-70b-versatile", "prompt_length": 2618}
+{"timestamp": "2026-07-05 12:22:57,391", "level": "INFO", "module": "groq_client", "message": "Groq API call succeeded", "duration_ms": 834, "response_length": 970}
+{"timestamp": "2026-07-05 12:22:57,391", "level": "INFO", "module": "extractor", "message": "AI extraction successful on first attempt"}
+{"timestamp": "2026-07-05 12:22:57,404", "level": "INFO", "module": "pipeline", "message": "Starting pipeline for email", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_4\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:57,405", "level": "INFO", "module": "pdf_extractor", "message": "Starting PDF extraction for invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:57,416", "level": "INFO", "module": "pdf_extractor", "message": "Successfully extracted 252 characters from invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:57,416", "level": "INFO", "module": "extractor", "message": "Starting AI extraction of invoice data"}
+{"timestamp": "2026-07-05 12:22:57,423", "level": "INFO", "module": "groq_client", "message": "Calling Groq API (attempt 1/3)", "model": "llama-3.3-70b-versatile", "prompt_length": 2578}
+{"timestamp": "2026-07-05 12:22:58,211", "level": "INFO", "module": "groq_client", "message": "Groq API call succeeded", "duration_ms": 788, "response_length": 736}
+{"timestamp": "2026-07-05 12:22:58,211", "level": "INFO", "module": "extractor", "message": "AI extraction successful on first attempt"}
+{"timestamp": "2026-07-05 12:22:58,228", "level": "INFO", "module": "pipeline", "message": "Starting pipeline for email", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_5\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:58,229", "level": "INFO", "module": "pdf_extractor", "message": "Starting PDF extraction for invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:58,242", "level": "INFO", "module": "pdf_extractor", "message": "Successfully extracted 314 characters from invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:58,242", "level": "INFO", "module": "extractor", "message": "Starting AI extraction of invoice data"}
+{"timestamp": "2026-07-05 12:22:58,251", "level": "INFO", "module": "groq_client", "message": "Calling Groq API (attempt 1/3)", "model": "llama-3.3-70b-versatile", "prompt_length": 2640}
+{"timestamp": "2026-07-05 12:22:59,107", "level": "INFO", "module": "groq_client", "message": "Groq API call succeeded", "duration_ms": 856, "response_length": 1034}
+{"timestamp": "2026-07-05 12:22:59,107", "level": "INFO", "module": "extractor", "message": "AI extraction successful on first attempt"}
+{"timestamp": "2026-07-05 12:22:59,118", "level": "INFO", "module": "pipeline", "message": "Starting pipeline for email", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_6\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:59,118", "level": "INFO", "module": "pdf_extractor", "message": "Starting PDF extraction for invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:59,127", "level": "INFO", "module": "pdf_extractor", "message": "Successfully extracted 243 characters from invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:59,128", "level": "INFO", "module": "extractor", "message": "Starting AI extraction of invoice data"}
+{"timestamp": "2026-07-05 12:22:59,135", "level": "INFO", "module": "groq_client", "message": "Calling Groq API (attempt 1/3)", "model": "llama-3.3-70b-versatile", "prompt_length": 2569}
+{"timestamp": "2026-07-05 12:22:59,865", "level": "INFO", "module": "groq_client", "message": "Groq API call succeeded", "duration_ms": 730, "response_length": 733}
+{"timestamp": "2026-07-05 12:22:59,865", "level": "INFO", "module": "extractor", "message": "AI extraction successful on first attempt"}
+{"timestamp": "2026-07-05 12:22:59,879", "level": "INFO", "module": "pipeline", "message": "Starting pipeline for email", "pdf_path": "C:\\Users\\rouna\\OneDrive\\Desktop\\invoicewatch\\po-matching-system\\sample_data\\emails\\email_7\\invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:59,880", "level": "INFO", "module": "pdf_extractor", "message": "Starting PDF extraction for invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:59,897", "level": "INFO", "module": "pdf_extractor", "message": "Successfully extracted 214 characters from invoice.pdf"}
+{"timestamp": "2026-07-05 12:22:59,897", "level": "INFO", "module": "extractor", "message": "Starting AI extraction of invoice data"}
+{"timestamp": "2026-07-05 12:22:59,906", "level": "INFO", "module": "groq_client", "message": "Calling Groq API (attempt 1/3)", "model": "llama-3.3-70b-versatile", "prompt_length": 2540}
+{"timestamp": "2026-07-05 12:23:00,505", "level": "INFO", "module": "groq_client", "message": "Groq API call succeeded", "duration_ms": 599, "response_length": 567}
+{"timestamp": "2026-07-05 12:23:00,505", "level": "INFO", "module": "extractor", "message": "AI extraction successful on first attempt"}
