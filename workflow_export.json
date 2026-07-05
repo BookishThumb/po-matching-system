@@ -1,0 +1,21 @@
+{
+  "workflow_name": "invoice-po-guardian",
+  "description": "AI-powered invoice validation pipeline",
+  "nodes": [
+    {"id": "1", "type": "trigger", "name": "Inbox Watcher", "description": "Scans local directory for incoming simulated email payloads (PDF + metadata json).", "file": "app/ingestion/inbox_watcher.py"},
+    {"id": "2", "type": "extraction", "name": "PDF Text Extraction", "description": "Uses pdfplumber to extract raw text layers from PDF attachments, maintaining basic page structures.", "file": "app/ingestion/pdf_extractor.py"},
+    {"id": "3", "type": "ai", "name": "Groq Invoice Extraction", "description": "Passes raw text to Groq LLM (Llama 3) to extract structured JSON data according to a strict Pydantic schema.", "file": "app/ai/extractor.py"},
+    {"id": "4", "type": "lookup", "name": "PO Retrieval", "description": "Looks up the extracted Purchase Order number in the SQLite database to fetch expected PO details.", "file": "app/matching/po_matcher.py"},
+    {"id": "5", "type": "logic", "name": "Field Comparison", "description": "Compares extracted invoice fields (vendor, amounts, line items) against PO records, applying fuzzy matching and percentage-based tolerances.", "file": "app/matching/po_matcher.py"},
+    {"id": "6", "type": "logic", "name": "Discrepancy Detection", "description": "Analyzes match results to flag business discrepancies (e.g. price mismatch, missing items, vendor mismatch) as major or minor severity.", "file": "app/matching/discrepancy.py"},
+    {"id": "7", "type": "logic", "name": "Validation Rules", "description": "Determines overall invoice status ('Ready for Payment', 'Procurement Review', 'Rejected') based on discrepancy severities.", "file": "app/matching/validation_rules.py"},
+    {"id": "8", "type": "storage", "name": "Store Invoice Record", "description": "Persists the full invoice record, matching summary, discrepancies, and generates an audit log trail.", "file": "app/pipeline.py"},
+    {"id": "9", "type": "human", "name": "Procurement Review", "description": "REST API endpoints serving a frontend UI for human reviewers to view extracted data alongside the PO and discrepancy analysis.", "file": "app/api/routes.py"},
+    {"id": "10", "type": "approval", "name": "Approval/Rejection", "description": "Final human override or approval workflow endpoints that update invoice status and append audit logs.", "file": "app/api/routes.py"}
+  ],
+  "connections": [
+    {"from": "1", "to": "2"}, {"from": "2", "to": "3"}, {"from": "3", "to": "4"},
+    {"from": "4", "to": "5"}, {"from": "5", "to": "6"}, {"from": "6", "to": "7"},
+    {"from": "7", "to": "8"}, {"from": "8", "to": "9"}, {"from": "9", "to": "10"}
+  ]
+}
