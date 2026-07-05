@@ -11,7 +11,7 @@ An AI-powered procurement automation pipeline that ingests invoice PDFs, extract
 [Approval/Review UI] <- [Store Record] <- [Validation Rules] <- [Discrepancy Detection] <- [Field Comparison]
 ```
 
-This system acts as a code-based equivalent to tools like n8n and Airtable, using FastAPI and SQLite to build a standalone processing and review pipeline.
+This system acts as a code-based equivalent to tools like n8n, using FastAPI for orchestration, Airtable for final invoice storage, and SQLite for local dashboard state caching.
 
 ## Setup Instructions
 
@@ -77,7 +77,7 @@ To ensure the system is secure and resilient, the following security layers have
 3. **Matching Engine:** `app/matching/po_matcher.py` pulls the PO from SQLite and compares it field-by-field (amounts, line items).
 4. **Discrepancies:** `app/matching/discrepancy.py` analyzes the match to flag deviations (e.g. quantity mismatches, price mismatches, missing PO).
 5. **Business Rules:** `app/matching/validation_rules.py` triages the invoice into `Ready for Payment`, `Procurement Review`, or `Rejected`.
-6. **Storage:** The full `Invoice` is saved in SQLite, and an `AuditLog` entry is appended.
+6. **Storage:** The full `Invoice` is exported to Airtable (if configured) and cached in SQLite for the local review UI.
 
 ## How to Run the Demo
 
@@ -109,7 +109,7 @@ Discrepancy Severity Thresholds (defined in `discrepancy.py`):
 ## Assumptions Made
 
 - **No live email inbox connected:** Ingestion is simulated via a watched folder (`sample_data/emails`).
-- **SQLite Database:** Used as the local equivalent of Airtable/Notion (per the "or equivalent" spec allowance).
+- **Airtable Integration:** Implemented for Step 7 (Invoice Storage). SQLite is still used alongside it to power the local review dashboard.
 - **FastAPI / Python Orchestration:** Substituted for n8n. The pipeline graph is provided in `workflow_export.json`.
 - **Fuzzy Matching:** Line item matching uses description similarity rather than strict equality since real-world vendor invoices often reword PO line items slightly.
 - **Log file paths:** Application logs are written to `app.log` in the project root to support the `GET /logs/recent` frontend view.

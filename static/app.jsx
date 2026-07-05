@@ -253,7 +253,7 @@ const LandingPage = ({ onNavigate }) => {
            <span className="flex items-center gap-2"><i data-lucide="code"></i> Python</span>
            <span className="flex items-center gap-2"><i data-lucide="zap"></i> FastAPI</span>
            <span className="flex items-center gap-2"><i data-lucide="cpu"></i> Groq (Llama 3.3)</span>
-           <span className="flex items-center gap-2"><i data-lucide="database"></i> SQLite</span>
+           <span className="flex items-center gap-2"><i data-lucide="database"></i> Airtable</span>
            <span className="flex items-center gap-2"><i data-lucide="layout"></i> React</span>
         </div>
       </section>
