@@ -105,8 +105,10 @@ def review_invoice(invoice_id: int, review: ReviewRequest, db: Session = Depends
         invoice.validation_status = review.override_status
     elif review.decision == "approve":
         invoice.validation_status = "Ready for Payment"
+        invoice.approved_at = datetime.now(timezone.utc)
     elif review.decision == "reject":
         invoice.validation_status = "Rejected"
+        invoice.rejection_reason = review.reviewer_comments
         
     invoice.last_updated = datetime.now(timezone.utc)
     
@@ -133,6 +135,7 @@ def approve_invoice(invoice_id: int, actor: str = Body(default="reviewer", embed
         
     old_status = invoice.validation_status
     invoice.validation_status = "Ready for Payment"
+    invoice.approved_at = datetime.now(timezone.utc)
     invoice.last_updated = datetime.now(timezone.utc)
     
     db.add(AuditLog(invoice_id=invoice.id, action="status_changed", old_value=old_status, new_value="Ready for Payment", actor=actor))
@@ -164,6 +167,7 @@ def reject_invoice(invoice_id: int, reject_req: RejectRequest, db: Session = Dep
         
     old_status = invoice.validation_status
     invoice.validation_status = "Rejected"
+    invoice.rejection_reason = reject_req.reason
     
     # Append to existing comments
     existing_comments = invoice.reviewer_comments or ""

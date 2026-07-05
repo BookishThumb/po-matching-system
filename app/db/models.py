@@ -47,7 +47,9 @@ class Invoice(Base):
     email_subject = Column(String, nullable=True)
     
     received_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    approved_at = Column(DateTime, nullable=True)
     payment_done_at = Column(DateTime, nullable=True)
+    rejection_reason = Column(Text, nullable=True)
     last_updated = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     def __repr__(self):
